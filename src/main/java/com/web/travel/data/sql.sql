@@ -1,74 +1,46 @@
--- Tạo bảng User
-CREATE TABLE User (
-  id INT PRIMARY KEY,
-  username VARCHAR(50) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL,
-  full_name VARCHAR(255),
-  email VARCHAR(255) UNIQUE,
-  phone VARCHAR(20)
-);
+CREATE SCHEMA `blogs` ;
+use blogs;
+-- author
+ALTER TABLE blogs.author MODIFY COLUMN full_name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+INSERT INTO blogs.author (created_at, deleted, updated_at, email, full_name, password, phone, username)
+VALUES
+('2023-05-05 12:34:56.789', 0, '2023-05-05 12:34:56.789', 'user1@example.com', 'User One', 'password1', '1234567890', 'user1'),
+('2023-05-06 09:00:00.000', 1, '2023-05-06 09:00:00.000', 'user2@example.com', 'User Two', 'password2', '0987654321', 'user2');
 
--- Tạo bảng Article
-CREATE TABLE Article (
-  id INT PRIMARY KEY,
-  title VARCHAR(255) NOT NULL,
-  content TEXT,
-  author_id INT NOT NULL,
-  category_id INT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (author_id) REFERENCES User(id),
-  FOREIGN KEY (category_id) REFERENCES Category(id)
-);
+-- location
+ALTER TABLE location MODIFY name VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+INSERT INTO blogs.location (name)
+VALUES
+('Hà Nội'),
+('Hồ Chí Minh'),
+('Đà Nẵng');
 
--- Tạo bảng Category
-CREATE TABLE Category (
-  id INT PRIMARY KEY,
-  name VARCHAR(50) NOT NULL UNIQUE,
-  description TEXT
-);
+-- blog;
+ALTER TABLE blogs.blog MODIFY COLUMN content1 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE blogs.blog MODIFY COLUMN content2 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE blogs.blog MODIFY COLUMN content3 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE blogs.blog MODIFY COLUMN title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Tạo bảng Comment
-CREATE TABLE Comment (
-  id INT PRIMARY KEY,
-  content TEXT NOT NULL,
-  author_name VARCHAR(255),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  article_id INT NOT NULL,
-  FOREIGN KEY (article_id) REFERENCES Article(id)
-);
 
--- Tạo bảng Tag
-CREATE TABLE Tag (
-  id INT PRIMARY KEY,
-  name VARCHAR(50) NOT NULL UNIQUE,
-  description TEXT
-);
+INSERT INTO blogs.blog (content1, content2, content3, title, author_id, location_id)
+VALUES ('Blog content 1 ô', 'Blog content 2 đ', 'blogBlog content 3 ê ơ', 'My First Blog', 1, 1),
+('Blog content 4', 'Blog content 5', 'Blog content 6', 'My Second Blog', 1, 2),
+('Blog content 7', 'Blog content 8', 'Blog content 9', 'My Second Blog', 2, 2);
 
--- Tạo bảng Article_Tag (bảng liên kết n-n giữa bảng Article và bảng Tag)
-CREATE TABLE Article_Tag (
-  article_id INT NOT NULL,
-  tag_id INT NOT NULL,
-  PRIMARY KEY (article_id, tag_id),
-  FOREIGN KEY (article_id) REFERENCES Article(id),
-  FOREIGN KEY (tag_id) REFERENCES Tag(id)
-);
+-- img_src
+INSERT INTO img_src (source, thumbnailtagblog, blog_id) VALUES
+('http://example.com/image1.jpg', 'http://example.com/thumbnail1.jpg', 1),
+('http://example.com/image2.jpg', 'http://example.com/thumbnail2.jpg', 2);
 
--- Tạo bảng Image
-CREATE TABLE Image (
-  id INT PRIMARY KEY,
-  filename VARCHAR(255) NOT NULL,
-  path VARCHAR(255) NOT NULL,
-  article_id INT NOT NULL,
-  FOREIGN KEY (article_id) REFERENCES Article(id)
-);
--- Tạo bảng Rating
-CREATE TABLE Rating (
-  id INT PRIMARY KEY,
-  rating INT NOT NULL,
-  comment TEXT,
-  article_id INT NOT NULL,
-  user_id INT NOT NULL,
-  FOREIGN KEY (article_id) REFERENCES Article(id),
-  FOREIGN KEY (user_id) REFERENCES User(id)
-);
+-- tag
+INSERT INTO tag (name) VALUES   ('Travel'), ('Food') ;
+-- blog_tag
+INSERT INTO blogs.blog_tag (blog_id, tag_id) VALUES
+(1, 1),
+(1, 2),
+(2, 2)
+
+
+
+
+
